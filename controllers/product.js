@@ -256,18 +256,8 @@ const handleShipping = async (req, res, shipping) => {
   res.json(products);
 };
 
-const handleColor = async (req, res, color) => {
-  const products = await Product.find({ color })
-    .populate("category", "_id name")
-    .populate("subs", "_id name")
-    .populate("postedBy", "_id name")
-    .exec();
-
-  res.json(products);
-};
-
-const handleBrand = async (req, res, brand) => {
-  const products = await Product.find({ brand })
+const handleMaterial = async (req, res, material) => {
+  const products = await Product.find({ material })
     .populate("category", "_id name")
     .populate("subs", "_id name")
     .populate("postedBy", "_id name")
@@ -284,8 +274,7 @@ exports.searchFilters = async (req, res) => {
     stars,
     sub,
     shipping,
-    color,
-    brand,
+    material,
   } = req.body;
 
   if (query) {
@@ -319,13 +308,8 @@ exports.searchFilters = async (req, res) => {
     await handleShipping(req, res, shipping);
   }
 
-  if (color) {
-    console.log("color ---> ", color);
-    await handleColor(req, res, color);
-  }
-
-  if (brand) {
-    console.log("brand ---> ", brand);
-    await handleBrand(req, res, brand);
+  if (material) {
+    console.log("material ---> ", material);
+    await handleMaterial(req, res, material);
   }
 };
