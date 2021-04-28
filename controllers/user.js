@@ -26,7 +26,7 @@ exports.userCart = async (req, res) => {
 
     object.product = cart[i]._id;
     object.count = cart[i].count;
-    object.color = cart[i].color;
+    object.material = cart[i].material;
     // get price for creating total
     let productFromDb = await Product.findById(cart[i]._id)
       .select("price")
@@ -151,6 +151,38 @@ exports.createOrder = async (req, res) => {
   console.log("NEW ORDER SAVED", newOrder);
   res.json({ ok: true });
 };
+
+// exports.createPaypalOrder = async (req, res) => {
+//   // console.log(req.body);
+//   // return;
+//   const { paymentIntent } = req.body.paypalResponse;
+
+//   const user = await User.findOne({ email: req.user.email }).exec();
+
+//   let { products } = await Cart.findOne({ orderdBy: user._id }).exec();
+
+//   let newOrder = await new Order({
+//     products,
+//     paymentIntent,
+//     orderdBy: user._id,
+//   }).save();
+
+//   // decrement quantity, increment sold
+//   let bulkOption = products.map((item) => {
+//     return {
+//       updateOne: {
+//         filter: { _id: item.product._id }, // IMPORTANT item.product
+//         update: { $inc: { quantity: -item.count, sold: +item.count } },
+//       },
+//     };
+//   });
+
+//   let updated = await Product.bulkWrite(bulkOption, {});
+//   console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
+
+//   console.log("NEW ORDER SAVED", newOrder);
+//   res.json({ ok: true });
+// };
 
 exports.orders = async (req, res) => {
   let user = await User.findOne({ email: req.user.email }).exec();
